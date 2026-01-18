@@ -1,0 +1,18 @@
+version: 2
+
+sources:
+  - name: chinook
+    database: chinook        # postgres database name
+    schema: raw          # where raw tables live
+    tables:
+      - name: customer
+      - name: employee
+      - name: invoice
+      - name: invoice_line
+      - name: track
+      - name: album
+      - name: artist
+      - name: genre
+      - name: media_type
+      - name: playlist
+      - name: playlist_track
