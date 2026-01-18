@@ -1,0 +1,9 @@
+# Python virtual environments
+venv/
+.venv/
+env/
+.env/
+
+# chinook_analytics folder
+chinook_analytics/.gitignore
+
