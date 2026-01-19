@@ -1,8 +1,7 @@
 select 
     track_id,
     name,
-    album_id,
-    media_type_id,
+    album_id,   
     genre_id,
     composer,
     milliseconds,

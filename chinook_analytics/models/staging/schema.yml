@@ -1,0 +1,83 @@
+version: 2
+
+models:
+  - name: stg_customer
+    columns:
+      - name: support_rep_id
+        tests:
+          - relationships:
+              arguments:
+                to: ref('stg_employee')
+                field: employee_id
+                where: "support_rep_id is not null"
+
+  - name: stg_employee
+    columns:
+      - name: reports_to
+        tests:
+          - relationships:
+              arguments:
+                to: ref('stg_employee')
+                field: employee_id
+                where: "reports_to is not null"
+  - name: invoice
+    columns:
+      - name: invoice_id
+        tests:
+          - not_null
+          - unique
+      - name: customer_id
+        tests: 
+          - relationships: 
+              arguments: 
+                to: ref('stg_customer')
+                field: customer_id
+
+  - name: stg_album
+    columns:
+      - name: artist_id
+        tests:
+          - relationships:
+              arguments:
+                to: ref('stg_artist')
+                field: artist_id
+  - name: stg_genre
+    columns: 
+      - name: genre_id
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_track
+    columns:
+      - name: album_id
+        tests:
+          - relationships:
+              arguments:
+                to: ref('stg_album')
+                field: album_id
+      - name: genre_id
+        tests:
+          - relationships:
+              arguments:
+                to: ref('stg_genre')
+                field: genre_id
+
+  - name: stg_invoice_line
+    columns:
+      - name: invoice_line_id
+        tests:
+         - not_null
+         - unique
+      - name: invoice_id
+        tests:
+          - relationships: 
+              arguments:
+                to: ref('stg_invoice')
+                field: invoice_id
+      - name: track_id
+        tests: 
+          - relationships: 
+              arguments: 
+                to: ref('stg_track')
+                field: track_id
