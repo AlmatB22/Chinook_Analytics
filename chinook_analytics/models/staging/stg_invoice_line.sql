@@ -12,3 +12,5 @@ renamed as (
         quantity::int as quantity
     from source
 )
+
+select * from renamed
