@@ -1,83 +1,223 @@
 version: 2
 
 models:
-  - name: stg_customer
-    columns:
-      - name: support_rep_id
-        tests:
-          - relationships:
-              arguments:
-                to: ref('stg_employee')
-                field: employee_id
-                where: "support_rep_id is not null"
-
-  - name: stg_employee
-    columns:
-      - name: reports_to
-        tests:
-          - relationships:
-              arguments:
-                to: ref('stg_employee')
-                field: employee_id
-                where: "reports_to is not null"
-  - name: invoice
-    columns:
-      - name: invoice_id
-        tests:
-          - not_null
-          - unique
-      - name: customer_id
-        tests: 
-          - relationships: 
-              arguments: 
-                to: ref('stg_customer')
-                field: customer_id
-
   - name: stg_album
-    columns:
-      - name: artist_id
-        tests:
-          - relationships:
-              arguments:
-                to: ref('stg_artist')
-                field: artist_id
-  - name: stg_genre
-    columns: 
-      - name: genre_id
-        tests:
-          - not_null
-          - unique
-
-  - name: stg_track
+    description: "Staging model for albums data."
     columns:
       - name: album_id
+        description: "Primary key of the album."
+        tests:
+          - unique
+          - not_null
+      - name: title
+        description: "Title of the album."
+      - name: artist_id
+        description: "Foreign key to the artist table."
         tests:
           - relationships:
-              arguments:
-                to: ref('stg_album')
-                field: album_id
+              to: ref('stg_artist')
+              field: artist_id
+
+  - name: stg_artist
+    description: "Staging model for artists data."
+    columns:
+      - name: artist_id
+        description: "Primary key of the artist."
+        tests:
+          - unique
+          - not_null
+      - name: name
+        description: "Name of the artist."
+
+  - name: stg_customer
+    description: "Staging model for customers data."
+    columns:
+      - name: customer_id
+        description: "Primary key of the customer."
+        tests:
+          - unique
+          - not_null
+      - name: first_name
+        description: "First name of the customer."
+      - name: last_name
+        description: "Last name of the customer."
+      - name: company
+        description: "Company of the customer."
+      - name: address
+        description: "Address of the customer."
+      - name: city
+        description: "City of the customer."
+      - name: state
+        description: "State of the customer."
+      - name: country
+        description: "Country of the customer."
+      - name: postal_code
+        description: "Postal code of the customer."
+      - name: phone
+        description: "Phone number of the customer."
+      - name: fax
+        description: "Fax number of the customer."
+      - name: email
+        description: "Email address of the customer."
+      - name: support_rep_id
+        description: "Foreign key to the employee table (support representative)."
+        tests:
+          - relationships:
+              to: ref('stg_employee')
+              field: employee_id
+              where: "support_rep_id is not null"
+
+  - name: stg_employee
+    description: "Staging model for employees data."
+    columns:
+      - name: employee_id
+        description: "Primary key of the employee."
+        tests:
+          - unique
+          - not_null
+      - name: last_name
+        description: "Last name of the employee."
+      - name: first_name
+        description: "First name of the employee."
+      - name: title
+        description: "Job title of the employee."
+      - name: reports_to
+        description: "Manager's employee ID."
+        tests:
+          - relationships:
+              to: ref('stg_employee')
+              field: employee_id
+              where: "reports_to is not null"
+      - name: birth_date
+        description: "Birth date of the employee."
+      - name: hire_date
+        description: "Hire date of the employee."
+      - name: address
+        description: "Address of the employee."
+      - name: city
+        description: "City of the employee."
+      - name: state
+        description: "State of the employee."
+      - name: country
+        description: "Country of the employee."
+      - name: postal_code
+        description: "Postal code of the employee."
+      - name: phone
+        description: "Phone number of the employee."
+      - name: fax
+        description: "Fax number of the employee."
+      - name: email
+        description: "Email address of the employee."
+
+  - name: stg_genre
+    description: "Staging model for genres data."
+    columns:
       - name: genre_id
+        description: "Primary key of the genre."
+        tests:
+          - unique
+          - not_null
+      - name: name
+        description: "Name of the genre."
+
+  - name: stg_invoice
+    description: "Staging model for invoices data."
+    columns:
+      - name: invoice_id
+        description: "Primary key of the invoice."
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: "Foreign key to the customer table."
         tests:
           - relationships:
-              arguments:
-                to: ref('stg_genre')
-                field: genre_id
+              to: ref('stg_customer')
+              field: customer_id
+      - name: invoice_date
+        description: "Date of the invoice."
+      - name: billing_address
+        description: "Billing address of the invoice."
+      - name: billing_city
+        description: "Billing city of the invoice."
+      - name: billing_state
+        description: "Billing state of the invoice."
+      - name: billing_country
+        description: "Billing country of the invoice."
+      - name: billing_postal_code
+        description: "Billing postal code of the invoice."
+      - name: total
+        description: "Total amount of the invoice."
 
   - name: stg_invoice_line
+    description: "Staging model for invoice lines data."
     columns:
       - name: invoice_line_id
+        description: "Primary key of the invoice line."
         tests:
-         - not_null
-         - unique
+          - unique
+          - not_null
       - name: invoice_id
+        description: "Foreign key to the invoice table."
         tests:
-          - relationships: 
-              arguments:
-                to: ref('stg_invoice')
-                field: invoice_id
+          - relationships:
+              to: ref('stg_invoice')
+              field: invoice_id
       - name: track_id
-        tests: 
-          - relationships: 
-              arguments: 
-                to: ref('stg_track')
-                field: track_id
+        description: "Foreign key to the track table."
+        tests:
+          - relationships:
+              to: ref('stg_track')
+              field: track_id
+      - name: unit_price
+        description: "Unit price of the track."
+      - name: quantity
+        description: "Quantity of the track."
+
+  - name: stg_media_type
+    description: "Staging model for media types data."
+    columns:
+      - name: media_type_id
+        description: "Primary key of the media type."
+        tests:
+          - unique
+          - not_null
+      - name: name
+        description: "Name of the media type."
+
+  - name: stg_track
+    description: "Staging model for tracks data."
+    columns:
+      - name: track_id
+        description: "Primary key of the track."
+        tests:
+          - unique
+          - not_null
+      - name: name
+        description: "Name of the track."
+      - name: album_id
+        description: "Foreign key to the album table."
+        tests:
+          - relationships:
+              to: ref('stg_album')
+              field: album_id
+      - name: media_type_id
+        description: "Foreign key to the media type table."
+        tests:
+          - relationships:
+              to: ref('stg_media_type')
+              field: media_type_id
+      - name: genre_id
+        description: "Foreign key to the genre table."
+        tests:
+          - relationships:
+              to: ref('stg_genre')
+              field: genre_id
+      - name: composer
+        description: "Composer of the track."
+      - name: milliseconds
+        description: "Duration of the track in milliseconds."
+      - name: bytes
+        description: "Size of the track in bytes."
+      - name: unit_price
+        description: "Unit price of the track."
